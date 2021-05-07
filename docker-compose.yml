@@ -14,7 +14,7 @@ services:
     environment:
       - USER_ID=113
       - GROUP_ID=1001
-    command: bash -c "bitcoind -prune=550 -rpcallowip=0.0.0.0"
+    command: bash -c "bitcoind -chain=regtest -prune=550 -rpcallowip=0.0.0.0 -zmqpubhashblock=0.0.0.0 -zmqpubhashtx=0.0.0.0 -zmqpubrawblock=0.0.0.0"
     volumes:
       - bitcoind:/data
     networks:
