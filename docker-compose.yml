@@ -1,0 +1,29 @@
+version: '3'
+
+# See more config options: https://manpages.debian.org/testing/bitcoind/bitcoind.1.en.html
+services:
+  bitcoind:
+    build: .
+    container_name: bitcoind
+    restart: always
+    expose: 
+      - '18443'
+      - '18444'
+      - '28334'
+      - '28335'
+    environment:
+      - USER_ID=113
+      - GROUP_ID=1001
+    command: bash -c "bitcoind -prune=550 -rpcallowip=0.0.0.0"
+    volumes:
+      - bitcoind:/data
+    networks:
+      default:
+ 
+networks:
+  default:
+
+volumes:
+  bitcoind:
+  
+  
