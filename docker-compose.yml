@@ -5,25 +5,33 @@ services:
   bitcoind:
     build: .
     container_name: bitcoind
-    restart: always
-    expose: 
-      - '18443'
-      - '18444'
-      - '28334'
-      - '28335'
-    environment:
-      - USER_ID=113
-      - GROUP_ID=1001
-    command: bash -c "bitcoind -chain=regtest -prune=550 -rpcallowip=0.0.0.0 -zmqpubhashblock=0.0.0.0 -zmqpubhashtx=0.0.0.0 -zmqpubrawblock=0.0.0.0"
-    volumes:
-      - bitcoind:/data
+    expose:
+      - '38333'         # only be accessible to linked services (i.e. used for zmq output to lightning daemon or lightning-terminal, not accessible from outside world)
+      - '38334'         # only be accessible to linked services (i.e. used for zmq output to lightning daemon or lightning-terminal, not accessible from outside world)
     networks:
       default:
+    ports: ['8332:8332', '18332:18332', '18333:18333', '18443:18443']    # Respectively: mainnet, testnet, non-default port, regtest
+    restart: always
+    volumes:
+      - bitcoind:/home/bitcoin/
+      - type: bind
+        source: ${PWD}/bitcoin.conf
+        target: /home/bitcoin/.bitcoin/testnet3/bitcoin.conf
+        # read_only: true
  
 networks:
   default:
 
 volumes:
   bitcoind:
-  
-  
+
+
+
+
+# LOCAL DEV PURPOSES ONLY
+# -rpcauth=<user:password> value generated using https://jlopp.github.io/bitcoin-core-rpc-auth-generator/
+# https://manpages.debian.org/testing/bitcoind/bitcoind.1.en.html – Bitcoin core daemon config
+# https://github.com/lightningnetwork/lnd – Lightning Network daemon
+# https://github.com/lightninglabs/lightning-terminal - LND Terminal daemon which runs litd, lncli, frcli, loop, pool
+version: '3'
+

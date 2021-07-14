@@ -5,3 +5,8 @@ A docker build for bitcoin core
 
 ## Run it
 - `docker-compose up -d`
+
+
+### Node Customization
+
+Defer to `bitcoin.conf`
